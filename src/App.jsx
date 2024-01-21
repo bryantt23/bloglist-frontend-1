@@ -12,8 +12,12 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  useEffect(() => {
+  const getBlogsFromApi = () => {
     blogService.getAll().then(blogs => setBlogs(blogs));
+  }
+
+  useEffect(() => {
+    getBlogsFromApi()
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const userTemp = JSON.parse(loggedUserJSON)
@@ -28,7 +32,7 @@ const App = () => {
       e.preventDefault()
       async function fetch() {
         await blogService.addBlog({ title, author, url }, user.token)
-        blogService.getAll().then(blogs => setBlogs(blogs));
+        getBlogsFromApi()
       }
       fetch()
     }
