@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,12 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+  const [notification, setNotification] = useState(null)
+
+  const sendNotification = (notification) => {
+    setNotification(notification)
+    setTimeout(() => { setNotification(null) }, 3000)
+  }
 
   const getBlogsFromApi = () => {
     blogService.getAll().then(blogs => setBlogs(blogs));
@@ -32,6 +39,7 @@ const App = () => {
       e.preventDefault()
       async function fetch() {
         await blogService.addBlog({ title, author, url }, user.token)
+        sendNotification({ message: `${title} by ${author} added`, type: "success" })
         getBlogsFromApi()
       }
       fetch()
@@ -111,6 +119,8 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      sendNotification({ message: 'Wrong credentials', type: "error" });
+
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -121,6 +131,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification} />
       <h2>blogs</h2>
 
       {user === null ? loginForm() : getBlogs()}
