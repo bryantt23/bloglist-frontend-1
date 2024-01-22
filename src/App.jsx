@@ -27,7 +27,6 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const userTemp = JSON.parse(loggedUserJSON)
-      console.log("🚀 ~ useEffect ~ userTemp:", userTemp)
       setUser(userTemp)
       setShowBlogForm(false)
     }
@@ -70,7 +69,9 @@ const App = () => {
           blogs.map(blog => (
             <Blog key={blog._id} blog={blog}
               sendNotification={sendNotification}
-              getBlogsFromApi={getBlogsFromApi} />
+              getBlogsFromApi={getBlogsFromApi}
+              user={user}
+            />
           ))
         }
         {user.name} is logged in <button onClick={logOut}>Logout</button>
