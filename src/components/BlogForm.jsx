@@ -1,5 +1,6 @@
 import { useState, } from 'react';
 import blogService from '../services/blogs';
+import PropTypes from 'prop-types'; // Import PropTypes
 
 const BlogForm = ({ setShowBlogForm, user, sendNotification, getBlogsFromApi }) => {
     const [title, setTitle] = useState('');
@@ -35,5 +36,15 @@ const BlogForm = ({ setShowBlogForm, user, sendNotification, getBlogsFromApi }) 
         </form>
     </div>
 }
+
+// Define PropTypes for BlogForm
+BlogForm.propTypes = {
+    setShowBlogForm: PropTypes.func.isRequired,
+    user: PropTypes.shape({
+        token: PropTypes.string.isRequired
+    }).isRequired,
+    sendNotification: PropTypes.func.isRequired,
+    getBlogsFromApi: PropTypes.func.isRequired
+};
 
 export default BlogForm
