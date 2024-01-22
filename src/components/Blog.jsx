@@ -32,13 +32,25 @@ const Blog = ({ blog, sendNotification, getBlogsFromApi, user }) => {
     fetch()
   }
 
-  return <div style={blogStyle}>
-    {blog.title} <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? "Hide details" : "Show details"}</button>
-    {showDetails && <div>Author: {blog.author}, url: {blog.url}, likes: {blog.likes} <button onClick={addLike}>Like</button>
-      {blog.user.name === user.name && <button onClick={deleteTheBlog}>Delete blog</button>}
+  return (
+    <div style={blogStyle}>
+      <span className="blog-title">{blog.title}</span>
+      <button onClick={() => setShowDetails(!showDetails)}>
+        {showDetails ? "Hide details" : "Show details"}
+      </button>
 
-      <p>Added by {blog.user.name}</p></div>}
-  </div>
+      {showDetails && (
+        <div>
+          <span className="blog-author">Author: {blog.author}</span>
+          <span className="blog-url">URL: {blog.url}</span>
+          <span className="blog-likes">Likes: {blog.likes}</span>
+          <button onClick={addLike}>Like</button>
+          {blog.user.name === user.name && <button onClick={deleteTheBlog}>Delete blog</button>}
+          <p>Added by {blog.user.name}</p>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default Blog
+export default Blog;
