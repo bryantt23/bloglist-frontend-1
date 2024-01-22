@@ -5,6 +5,7 @@ import blogService from './services/blogs';
 import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
+import Blogs from './components/Blogs';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -32,38 +33,6 @@ const App = () => {
       setShowBlogForm(false)
     }
   }, []);
-
-
-
-  const getBlogs = () => {
-    const logOut = () => {
-      setUser(null)
-      window.localStorage.removeItem("loggedBlogAppUser")
-      setShowBlogForm(false)
-    }
-    return (
-      <div>
-        {
-          blogs.map(blog => (
-            <Blog key={blog._id} blog={blog}
-              sendNotification={sendNotification}
-              getBlogsFromApi={getBlogsFromApi}
-              user={user}
-            />
-          ))
-        }
-        {user.name} is logged in <button onClick={logOut}>Logout</button>
-        <div>
-          {showBlogForm ? <BlogForm
-            setShowBlogForm={setShowBlogForm}
-            user={user}
-            sendNotification={sendNotification}
-            getBlogsFromApi={getBlogsFromApi}
-          /> : <button onClick={() => { setShowBlogForm(true) }}>add blog</button>}
-        </div>
-      </div>
-    )
-  }
 
   const handleLogin = async e => {
     e.preventDefault();
@@ -99,7 +68,16 @@ const App = () => {
           password={password}
           setPassword={setPassword}
           handleLogin={handleLogin}
-        /> : getBlogs()}
+        /> :
+        <Blogs
+          blogs={blogs}
+          user={user}
+          setUser={setUser} // Make sure to pass setUser
+          sendNotification={sendNotification}
+          getBlogsFromApi={getBlogsFromApi}
+          showBlogForm={showBlogForm}
+          setShowBlogForm={setShowBlogForm}
+        />}
 
     </div>
   );
