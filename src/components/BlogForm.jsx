@@ -21,13 +21,13 @@ const BlogForm = ({ setShowBlogForm, user, sendNotification, getBlogsFromApi }) 
         <h2>create new</h2>
         <form onSubmit={addBlog}>
             <div>
-                title: <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
+                title: <input type="text" value={title} onChange={e => setTitle(e.target.value)} data-testid="title-input" />
             </div>
             <div>
-                author: <input type="text" value={author} onChange={e => setAuthor(e.target.value)} />
+                author: <input type="text" value={author} onChange={e => setAuthor(e.target.value)} data-testid="author-input" />
             </div>
             <div>
-                url: <input type="text" value={url} onChange={e => setUrl(e.target.value)} />
+                url: <input type="text" value={url} onChange={e => setUrl(e.target.value)} data-testid="url-input" />
             </div>
             <div>
                 <button type="submit">add</button>
