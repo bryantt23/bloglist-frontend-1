@@ -4,6 +4,7 @@ import BlogForm from './components/BlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -33,29 +34,6 @@ const App = () => {
   }, []);
 
 
-  const loginForm = () => {
-    return (
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type='text'
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          ></input>
-        </div>
-
-        <div>
-          password
-          <input
-            type='text'
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          ></input>
-        </div>
-        <button type="submit">Login</button>
-      </form>)
-  }
 
   const getBlogs = () => {
     const logOut = () => {
@@ -114,7 +92,14 @@ const App = () => {
       <Notification notification={notification} />
       <h2>blogs</h2>
 
-      {user === null ? loginForm() : getBlogs()}
+      {user === null ?
+        <LoginForm
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+        /> : getBlogs()}
 
     </div>
   );
