@@ -68,7 +68,9 @@ const App = () => {
       <div>
         {
           blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog._id} blog={blog}
+              sendNotification={sendNotification}
+              getBlogsFromApi={getBlogsFromApi} />
           ))
         }
         {user.name} is logged in <button onClick={logOut}>Logout</button>

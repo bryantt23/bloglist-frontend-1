@@ -14,4 +14,10 @@ const addBlog = (newBlog, token) => {
   return request.then(response => response.data);
 };
 
-export default { getAll, addBlog };
+const updateBlog=(updatedBlog,  blogId)=>{
+  const request = axios.put(`${baseUrl}/${blogId}`, updatedBlog);
+  return request.then(response => response.data);
+
+}
+
+export default { getAll, addBlog, updateBlog };
