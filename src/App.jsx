@@ -13,6 +13,7 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
   const [notification, setNotification] = useState(null)
+  const [showBlogForm, setShowBlogForm] = useState(false)
 
   const sendNotification = (notification) => {
     setNotification(notification)
@@ -30,6 +31,7 @@ const App = () => {
       const userTemp = JSON.parse(loggedUserJSON)
       console.log("🚀 ~ useEffect ~ userTemp:", userTemp)
       setUser(userTemp)
+      setShowBlogForm(true)
     }
   }, []);
 
@@ -59,6 +61,7 @@ const App = () => {
         </div>
         <div>
           <button type="submit">add</button>
+          <button onClick={() => { setShowBlogForm(false) }}>cancel</button>
         </div>
       </form>
     </div>
@@ -92,6 +95,7 @@ const App = () => {
     const logOut = () => {
       setUser(null)
       window.localStorage.removeItem("loggedBlogAppUser")
+      setShowBlogForm(false)
     }
     return (
       <div>
@@ -100,9 +104,12 @@ const App = () => {
             <Blog key={blog.id} blog={blog} />
           ))
         }
-        <button onClick={logOut}>Logout</button>
-
-        {blogForm()}
+        {user.name} is logged in <button onClick={logOut}>Logout</button>
+        <p>
+          {!showBlogForm && <button onClick={() => { setShowBlogForm(true) }}>add blog</button>
+          }
+        </p>
+        {showBlogForm && blogForm()}
       </div>
     )
   }
