@@ -11,7 +11,8 @@ const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
   return <div style={blogStyle}>
     {blog.title} <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? "Hide details" : "Show details"}</button>
-    {showDetails && <div>Author: {blog.author}, url: {blog.url}, likes: {blog.likes}</div>}
+    {showDetails && <div>Author: {blog.author}, url: {blog.url}, likes: {blog.likes}
+      <p>Added by {blog.user.name}</p></div>}
   </div>
 }
 
