@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
+import BlogForm from './components/BlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -9,9 +10,6 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
   const [notification, setNotification] = useState(null)
   const [showBlogForm, setShowBlogForm] = useState(false)
 
@@ -31,42 +29,11 @@ const App = () => {
       const userTemp = JSON.parse(loggedUserJSON)
       console.log("🚀 ~ useEffect ~ userTemp:", userTemp)
       setUser(userTemp)
-      setShowBlogForm(true)
+      setShowBlogForm(false)
     }
   }, []);
 
 
-  const blogForm = () => {
-    const addBlog = (e) => {
-      e.preventDefault()
-      async function fetch() {
-        await blogService.addBlog({ title, author, url }, user.token)
-        sendNotification({ message: `${title} by ${author} added`, type: "success" })
-        getBlogsFromApi()
-      }
-      fetch()
-    }
-
-    return <div>
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title: <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
-        </div>
-        <div>
-          author: <input type="text" value={author} onChange={e => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url: <input type="text" value={url} onChange={e => setUrl(e.target.value)} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-          <button onClick={() => { setShowBlogForm(false) }}>cancel</button>
-        </div>
-      </form>
-    </div>
-
-  }
   const loginForm = () => {
     return (
       <form onSubmit={handleLogin}>
@@ -105,11 +72,14 @@ const App = () => {
           ))
         }
         {user.name} is logged in <button onClick={logOut}>Logout</button>
-        <p>
-          {!showBlogForm && <button onClick={() => { setShowBlogForm(true) }}>add blog</button>
-          }
-        </p>
-        {showBlogForm && blogForm()}
+        <div>
+          {showBlogForm ? <BlogForm
+            setShowBlogForm={setShowBlogForm}
+            user={user}
+            sendNotification={sendNotification}
+            getBlogsFromApi={getBlogsFromApi}
+          /> : <button onClick={() => { setShowBlogForm(true) }}>add blog</button>}
+        </div>
       </div>
     )
   }
