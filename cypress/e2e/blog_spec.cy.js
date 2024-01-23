@@ -10,6 +10,13 @@ describe('Blog app', function () {
       password: 'testpassword'
     }
     cy.request('POST', 'http://localhost:3003/api/users/sign-up', user)
+    // Create a new user
+    const user2 = {
+      name: 'Test User 2',
+      username: 'anotheruser',
+      password: 'anotherpassword'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/sign-up', user2)
 
     // Visit the application
     cy.visit('http://localhost:5173')
@@ -96,9 +103,10 @@ it('Only the creator can see the delete button of a blog', function() {
   cy.get('input[type="text"]').type('anotheruser')
   cy.get('input[type="password"]').type('anotherpassword')
   cy.get('button').contains('Login').click()
+    cy.wait(1000) // Adjust based on your app's behavior
 
   // Visit the blog that was created by the first user
-  cy.contains('New Cypress Blog by Cypress Tester').click()
+      cy.contains('button', 'Show details').click()
 
   // Check that the delete button is not visible for the non-creator user
   cy.get('.blog-delete-button').should('not.exist')
