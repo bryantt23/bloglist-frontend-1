@@ -44,8 +44,8 @@ const Blog = ({ blog, sendNotification, getBlogsFromApi, user }) => {
           <span className="blog-author">Author: {blog.author}</span>
           <span className="blog-url">URL: {blog.url}</span>
           <span className="blog-likes">Likes: {blog.likes}</span>
-          <button onClick={addLike}>Like</button>
-          {blog.user.name === user.name && <button onClick={deleteTheBlog}>Delete blog</button>}
+          <button className="blog-like-button" onClick={addLike}>Like</button>
+          {blog.user.name === user.name && <button className="blog-delete-button" onClick={deleteTheBlog}>Delete blog</button>}
           <p>Added by {blog.user.name}</p>
         </div>
       )}

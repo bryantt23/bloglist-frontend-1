@@ -37,20 +37,38 @@ describe('Blog app', function() {
       cy.get('button').contains('Login').click()
     })
 
-    it('A blog can be created', function() {
-      // Open the form to create a new blog (adjust this if your app has a specific way to open the form)
-      cy.contains('button', 'add blog').click() // Adjust the button text if necessary
+it('A blog can be created, liked, and deleted', function() {
+  // Open the form to create a new blog
+  cy.contains('button', 'add blog').click()
 
-      // Fill in the form
-      cy.get('[data-testid="title-input"]').type('New Cypress Blog')
-      cy.get('[data-testid="author-input"]').type('Cypress Tester')
-      cy.get('[data-testid="url-input"]').type('http://testblog.com')
+  // Fill in the form
+  cy.get('[data-testid="title-input"]').type('New Cypress Blog')
+  cy.get('[data-testid="author-input"]').type('Cypress Tester')
+  cy.get('[data-testid="url-input"]').type('http://testblog.com')
 
-      // Submit the form
-      cy.get('button').contains('add').click()
+  // Submit the form
+  cy.get('button').contains('add').click()
 
-      // Verify the blog was added (adjust this to match how a new blog is displayed in your app)
-      cy.contains('New Cypress Blog by Cypress Tester')
-    })
+  // Verify the blog was added
+  cy.contains('New Cypress Blog by Cypress Tester')
+
+  // Wait for blog to load and display details
+  cy.wait(1000) // Adjust based on your app's behavior
+  cy.contains('button', 'Show details').click()
+
+  // Like the blog
+  cy.get('.blog-like-button').click() // Use a class or unique identifier for the like button
+  cy.contains('Likes: 1') // Check if the likes count has been incremented
+
+  // Delete the blog
+  cy.get('.blog-delete-button').click() // Use a class or unique identifier for the delete button
+  cy.on('window:confirm', () => true) // Handle the confirmation dialog
+  cy.contains('New Cypress Blog by Cypress Tester').should('not.exist') // Check if the blog is removed
+})
+
+
+
+
+
   })
 })
