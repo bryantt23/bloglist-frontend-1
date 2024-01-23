@@ -1,5 +1,5 @@
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     // Reset the database
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
 
@@ -15,7 +15,7 @@ describe('Blog app', function() {
     cy.visit('http://localhost:5173')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.contains('username') // Checks if the text 'username' is present
     cy.contains('password') // Checks if the text 'password' is present
 
@@ -29,15 +29,44 @@ describe('Blog app', function() {
     cy.get('button').contains('Login').should('be.visible')
   })
 
-  describe('When logged in', function() {
-    beforeEach(function() {
+  describe('When logged in', function () {
+    beforeEach(function () {
       // Log in
       cy.get('input[type="text"]').type('testuser')
       cy.get('input[type="password"]').type('testpassword')
       cy.get('button').contains('Login').click()
     })
 
-it('A blog can be created, liked, and deleted', function() {
+    it('A blog can be created, liked, and deleted', function () {
+      // Open the form to create a new blog
+      cy.contains('button', 'add blog').click()
+
+      // Fill in the form
+      cy.get('[data-testid="title-input"]').type('New Cypress Blog')
+      cy.get('[data-testid="author-input"]').type('Cypress Tester')
+      cy.get('[data-testid="url-input"]').type('http://testblog.com')
+
+      // Submit the form
+      cy.get('button').contains('add').click()
+
+      // Verify the blog was added
+      cy.contains('New Cypress Blog by Cypress Tester')
+
+      // Wait for blog to load and display details
+      cy.wait(1000) // Adjust based on your app's behavior
+      cy.contains('button', 'Show details').click()
+
+      // Like the blog
+      cy.get('.blog-like-button').click() // Use a class or unique identifier for the like button
+      cy.contains('Likes: 1') // Check if the likes count has been incremented
+
+      // Delete the blog
+      cy.get('.blog-delete-button').click() // Use a class or unique identifier for the delete button
+      cy.on('window:confirm', () => true) // Handle the confirmation dialog
+      cy.contains('New Cypress Blog by Cypress Tester').should('not.exist') // Check if the blog is removed
+    })
+
+it('Only the creator can see the delete button of a blog', function() {
   // Open the form to create a new blog
   cy.contains('button', 'add blog').click()
 
@@ -56,16 +85,24 @@ it('A blog can be created, liked, and deleted', function() {
   cy.wait(1000) // Adjust based on your app's behavior
   cy.contains('button', 'Show details').click()
 
-  // Like the blog
-  cy.get('.blog-like-button').click() // Use a class or unique identifier for the like button
-  cy.contains('Likes: 1') // Check if the likes count has been incremented
+  // Check that the delete button is visible for the creator
+  cy.get('.blog-delete-button').should('be.visible')
 
-  // Delete the blog
-  cy.get('.blog-delete-button').click() // Use a class or unique identifier for the delete button
-  cy.on('window:confirm', () => true) // Handle the confirmation dialog
-  cy.contains('New Cypress Blog by Cypress Tester').should('not.exist') // Check if the blog is removed
+  // Log out the current user (if your app has a logout functionality)
+  // This step may require adjustments based on your app's behavior
+  cy.contains('Logout').click()
+
+  // Log in as a different user (not the creator)
+  cy.get('input[type="text"]').type('anotheruser')
+  cy.get('input[type="password"]').type('anotherpassword')
+  cy.get('button').contains('Login').click()
+
+  // Visit the blog that was created by the first user
+  cy.contains('New Cypress Blog by Cypress Tester').click()
+
+  // Check that the delete button is not visible for the non-creator user
+  cy.get('.blog-delete-button').should('not.exist')
 })
-
 
 
 

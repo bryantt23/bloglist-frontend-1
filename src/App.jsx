@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import Blog from './components/Blog';
-import BlogForm from './components/BlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -47,13 +45,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       sendNotification({ message: 'Wrong credentials', type: "error" });
-
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
     }
-
   };
 
   return (
