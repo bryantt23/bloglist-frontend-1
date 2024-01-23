@@ -28,25 +28,29 @@ describe('Blog app', function() {
     // Checks if the login button is visible and contains the text 'Login'
     cy.get('button').contains('Login').should('be.visible')
   })
- 
-  describe('Login', function() {
-    it('succeeds with correct credentials', function() {
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      // Log in
       cy.get('input[type="text"]').type('testuser')
       cy.get('input[type="password"]').type('testpassword')
       cy.get('button').contains('Login').click()
-
-  // Check for a "Logout" button to verify successful login
-  cy.contains('button', 'Logout').should('be.visible')
     })
 
-    it('fails with wrong credentials', function() {
-      cy.get('input[type="text"]').type('wronguser')
-      cy.get('input[type="password"]').type('wrongpassword')
-      cy.get('button').contains('Login').click()
+    it('A blog can be created', function() {
+      // Open the form to create a new blog (adjust this if your app has a specific way to open the form)
+      cy.contains('button', 'add blog').click() // Adjust the button text if necessary
 
-  // Check for the presence of the login form again
-  cy.get('input[type="text"]').should('be.visible')
-  cy.get('input[type="password"]').should('be.visible')
+      // Fill in the form
+      cy.get('[data-testid="title-input"]').type('New Cypress Blog')
+      cy.get('[data-testid="author-input"]').type('Cypress Tester')
+      cy.get('[data-testid="url-input"]').type('http://testblog.com')
+
+      // Submit the form
+      cy.get('button').contains('add').click()
+
+      // Verify the blog was added (adjust this to match how a new blog is displayed in your app)
+      cy.contains('New Cypress Blog by Cypress Tester')
     })
   })
 })
