@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import blogService from './services/blogs';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
@@ -9,11 +9,16 @@ import User from './components/User';
 import Users from './components/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBlogs } from './features/blogs/blogSlice';
-import { setUser } from './features/user/userSlice';
+import { setUser, clearUser } from './features/user/userSlice';
+import './App.css'
 
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const logOut = () => {
+    dispatch(clearUser());
+    window.localStorage.removeItem("loggedBlogAppUser");
+  };
 
   const getBlogsFromApi = () => {
     blogService.getAll().then(blogs => dispatch(setBlogs(blogs.sort((a, b) => b.likes - a.likes))));
@@ -31,21 +36,24 @@ const App = () => {
   return (
     <Router>
       <div>
+        <nav>
+          <Link to="/">Blogs</Link>
+          <Link to="/users">Users</Link>
+          {user && (
+            <span>Logged in as {user.name}<button onClick={logOut}>Logout</button></span>
+          )}
+        </nav>
         <Notification />
         <Routes>
           {user ? (
-            // Routes accessible when the user is logged in
             <>
               <Route path="/" element={<Blogs />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users/:id" element={<User />} />
               <Route path="/blogs/:id" element={<Blog />} />
-
-              {/* Redirect from login to blogs if user is already logged in */}
               <Route path="/login" element={<Navigate replace to="/" />} />
             </>
           ) : (
-            // Only the login form is accessible when the user is not logged in
             <Route path="*" element={<LoginForm />} />
           )}
         </Routes>
