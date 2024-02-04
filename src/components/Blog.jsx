@@ -1,7 +1,9 @@
 import { useState, } from 'react';
 import blogService from '../services/blogs';
+import { useDispatch } from 'react-redux';
+import { setNotification } from '../actions/notificationActions';
 
-const Blog = ({ blog, sendNotification, getBlogsFromApi, user }) => {
+const Blog = ({ blog, getBlogsFromApi, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,12 +11,13 @@ const Blog = ({ blog, sendNotification, getBlogsFromApi, user }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+  const dispatch = useDispatch()
   const [showDetails, setShowDetails] = useState(false)
   const addLike = () => {
     async function fetch() {
       const updatedBlog = { ...blog, likes: blog.likes + 1 }
       await blogService.updateBlog(updatedBlog, blog._id)
-      sendNotification({ message: `${blog.title} by ${blog.author} liked`, type: "success" })
+      dispatch(setNotification({ message: `${blog.title} by ${blog.author} liked`, type: "success" }))
       getBlogsFromApi()
     }
     fetch()
@@ -24,7 +27,7 @@ const Blog = ({ blog, sendNotification, getBlogsFromApi, user }) => {
     async function fetch() {
       if (window.confirm(`Delete blog ${blog.title} by ${blog.author}`)) {
         await blogService.deleteBlog(user.token, blog._id)
-        sendNotification({ message: `${blog.title} by ${blog.author} deleted`, type: "success" })
+        dispatch(sendNotification({ message: `${blog.title} by ${blog.author} deleted`, type: "success" }))
         getBlogsFromApi()
       }
 

@@ -3,7 +3,7 @@ import React from 'react';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
 
-const Blogs = ({ blogs, user, sendNotification, getBlogsFromApi, showBlogForm, setShowBlogForm, setUser }) => {
+const Blogs = ({ blogs, user, getBlogsFromApi, showBlogForm, setShowBlogForm, setUser }) => {
   const logOut = () => {
     setUser(null); // setUser needs to be passed as a prop
     window.localStorage.removeItem("loggedBlogAppUser");
@@ -14,7 +14,6 @@ const Blogs = ({ blogs, user, sendNotification, getBlogsFromApi, showBlogForm, s
     <div>
       {blogs.map(blog => (
         <Blog key={blog._id} blog={blog}
-          sendNotification={sendNotification}
           getBlogsFromApi={getBlogsFromApi}
           user={user}
         />
@@ -25,7 +24,6 @@ const Blogs = ({ blogs, user, sendNotification, getBlogsFromApi, showBlogForm, s
           <BlogForm
             setShowBlogForm={setShowBlogForm}
             user={user}
-            sendNotification={sendNotification}
             getBlogsFromApi={getBlogsFromApi}
           /> :
           <button onClick={() => setShowBlogForm(true)}>add blog</button>
