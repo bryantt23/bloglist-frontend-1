@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs';
 import { useDispatch } from 'react-redux';
-import { setNotification } from './features/notifications/notificationSlice';
+import { setNotificationWithTimeout } from './features/blogs/blogSlice';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -41,7 +41,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      dispatch(setNotification({ message: 'Wrong credentials', type: "error" }));
+      dispatch(setNotificationWithTimeout({ message: 'Wrong credentials', type: "error" }));
     }
   };
 
@@ -62,7 +62,6 @@ const App = () => {
           blogs={blogs}
           user={user}
           setUser={setUser} // Make sure to pass setUser
-          sendNotification={sendNotification}
           getBlogsFromApi={getBlogsFromApi}
           showBlogForm={showBlogForm}
           setShowBlogForm={setShowBlogForm}

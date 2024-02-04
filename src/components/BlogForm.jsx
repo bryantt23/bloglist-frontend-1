@@ -2,7 +2,7 @@ import { useState, } from 'react';
 import blogService from '../services/blogs';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { useDispatch } from 'react-redux';
-import { setNotification } from '../features/notifications/notificationSlice';
+import { setNotificationWithTimeout } from '../features/blogs/blogSlice';
 
 const BlogForm = ({ setShowBlogForm, user, getBlogsFromApi }) => {
     const [title, setTitle] = useState('');
@@ -14,7 +14,7 @@ const BlogForm = ({ setShowBlogForm, user, getBlogsFromApi }) => {
         e.preventDefault()
         async function fetch() {
             await blogService.addBlog({ title, author, url }, user.token)
-            dispatch(setNotification({ message: `${title} by ${author} added`, type: "success" }))
+            dispatch(setNotificationWithTimeout({ message: `${title} by ${author} added`, type: "success" }))
             getBlogsFromApi()
         }
         fetch()
