@@ -1,7 +1,7 @@
 // components/Users.js
 import React, { useState, useEffect } from 'react';
 import usersService from '../services/users'; // Adjust the import path as needed
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 function User() {
     const { id } = useParams()
@@ -28,8 +28,9 @@ function User() {
             {userData.blogs && userData.blogs.length > 0 ? (
                 <ul>
                     {userData.blogs.map(blog => (
-                        <li key={blog._id}>{blog.title}</li>
-                    ))}
+                        <li key={blog._id}>
+                            <Link to={`/blogs/${blog._id}`}>{blog.title}</Link>
+                        </li>))}
                 </ul>
             ) : (
                 <p>No blogs found.</p>
