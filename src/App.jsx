@@ -4,19 +4,16 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs';
+import { useDispatch } from 'react-redux';
+import { setNotification } from './features/notifications/notificationSlice';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
   const [showBlogForm, setShowBlogForm] = useState(false)
-
-  const sendNotification = (notification) => {
-    setNotification(notification)
-    setTimeout(() => { setNotification(null) }, 3000)
-  }
+  const dispatch = useDispatch()
 
   const getBlogsFromApi = () => {
     blogService.getAll().then(blogs => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
@@ -44,13 +41,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      sendNotification({ message: 'Wrong credentials', type: "error" });
+      dispatch(setNotification({ message: 'Wrong credentials', type: "error" }));
     }
   };
 
   return (
     <div>
-      <Notification notification={notification} />
+      <Notification />
       <h2>blogs</h2>
 
       {user === null ?
