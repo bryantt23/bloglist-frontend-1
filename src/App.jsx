@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setBlogs } from './features/blogs/blogSlice';
 import { setUser } from './features/user/userSlice';
 import { useSelector } from 'react-redux';
+import Users from './components/Users';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -35,6 +36,7 @@ const App = () => {
         /> :
         <Blogs />}
 
+      <Users />
     </div>
   );
 };
