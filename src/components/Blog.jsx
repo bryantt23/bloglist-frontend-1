@@ -26,6 +26,39 @@ const Blog = () => {
     }
     fetch()
   }
+  const [comment, setComment] = useState('');
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const addComment = async () => {
+    if (comment.trim() === '') {
+      return; // Don't add empty comments
+    }
+
+    try {
+      const updatedBlog = {
+        ...blog,
+        comments: [...blog.comments, comment], // Add the comment to the existing comments
+      };
+
+      const returnedBlog = await blogService.updateBlog(updatedBlog, blog._id);
+      dispatch(updateBlog(returnedBlog));
+
+      // Clear the comment input field
+      setComment('');
+
+      dispatch(
+        setNotificationWithTimeout({
+          message: `Comment added to ${blog.title} by ${blog.author}`,
+          type: 'success',
+        })
+      );
+    } catch (error) {
+      // Handle error (e.g., show an error notification)
+    }
+  };
 
   const deleteTheBlog = () => {
     async function fetch() {
@@ -52,6 +85,20 @@ const Blog = () => {
         <button className="blog-like-button" onClick={addLike}>Like</button>
         {blog.user.name === user.name && <button className="blog-delete-button" onClick={deleteTheBlog}>Delete blog</button>}
         <p>Added by {blog.user.name}</p>
+        <ul>
+          {blog.comments?.length > 0 ? (
+            blog.comments.map(comment => <li key={comment._id}>{comment}</li>)
+          ) : (
+            <li>{blog.comments ? "No comments found" : "Loading comments..."}</li>
+          )}
+        </ul>
+        <input
+          type="text"
+          placeholder="Add a comment..."
+          value={comment}
+          onChange={handleCommentChange}
+        />
+        <button onClick={addComment}>Add Comment</button>
       </div>
     </div>
   );
