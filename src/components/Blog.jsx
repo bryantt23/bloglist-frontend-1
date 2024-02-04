@@ -5,7 +5,6 @@ import { setNotificationWithTimeout } from '../features/notifications/notificati
 import { updateBlog, deleteBlog } from '../features/blogs/blogSlice';
 
 const Blog = ({ blog }) => {
-  console.log("🚀 ~ Blog ~ blog:", blog)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,

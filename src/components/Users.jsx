@@ -1,6 +1,7 @@
 // components/Users.js
 import React, { useState, useEffect } from 'react';
 import usersService from '../services/users'; // Adjust the import path as needed
+import { Link } from 'react-router-dom';
 
 function Users() {
     const [users, setUsers] = useState([]);
@@ -21,15 +22,15 @@ function Users() {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Username</th>
                         <th>Blogs Created</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map((user) => (
                         <tr key={user._id}>
-                            <td>{user.name}</td>
-                            <td>{user.username}</td>
+                            <td>
+                                {/* <Link to={`/users/${user._id}`}>{user.name}</Link> */}
+                            </td>
                             <td>{user.blogs.length}</td>
                         </tr>
                     ))}
