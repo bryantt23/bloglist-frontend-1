@@ -1,7 +1,7 @@
 import { useState, } from 'react';
 import blogService from '../services/blogs';
 import { useDispatch } from 'react-redux';
-import { setNotification } from '../actions/notificationActions';
+import { setNotification } from '../features/notifications/notificationSlice';
 
 const Blog = ({ blog, getBlogsFromApi, user }) => {
   const blogStyle = {

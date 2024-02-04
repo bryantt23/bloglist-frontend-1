@@ -2,7 +2,7 @@ import { useState, } from 'react';
 import blogService from '../services/blogs';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { useDispatch } from 'react-redux';
-import { setNotification } from '../actions/notificationActions';
+import { setNotification } from '../features/notifications/notificationSlice';
 
 const BlogForm = ({ setShowBlogForm, user, getBlogsFromApi }) => {
     const [title, setTitle] = useState('');
