@@ -14,10 +14,10 @@ const BlogForm = ({ setShowBlogForm, user }) => {
     const addNewBlog = (e) => {
         e.preventDefault()
         async function fetch() {
-            const blog = { title, author, url }
-            await blogService.addBlog(blog, user.token)
-            dispatch(setNotificationWithTimeout({ message: `${title} by ${author} added`, type: "success" }))
-            dispatch(addBlog(blog))
+            const blogData = { title, author, url };
+            const addedBlog = await blogService.addBlog(blogData, user.token);  // Assuming this returns the newly added blog data
+            dispatch(addBlog(addedBlog));
+            dispatch(setNotificationWithTimeout({ message: `${title} by ${author} added`, type: "success" }));
         }
         fetch()
     }
