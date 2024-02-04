@@ -1,10 +1,11 @@
 import { useState, } from 'react';
 import blogService from '../services/blogs';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setNotificationWithTimeout } from '../features/notifications/notificationSlice';
 import { updateBlog, deleteBlog } from '../features/blogs/blogSlice';
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
+  console.log("🚀 ~ Blog ~ blog:", blog)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -13,6 +14,7 @@ const Blog = ({ blog, user }) => {
     marginBottom: 5
   }
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user);
   const [showDetails, setShowDetails] = useState(false)
   const addLike = () => {
     async function fetch() {

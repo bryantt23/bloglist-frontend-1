@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import blogService from './services/blogs';
-import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs';
 import { useDispatch } from 'react-redux';
-import { setNotificationWithTimeout } from './features/notifications/notificationSlice';
 import { setBlogs } from './features/blogs/blogSlice';
 import { setUser } from './features/user/userSlice';
 import { useSelector } from 'react-redux';
 
 const App = () => {
-  const [showBlogForm, setShowBlogForm] = useState(false)
   const dispatch = useDispatch()
   const user = useSelector(state => state.user);
 
@@ -25,7 +22,6 @@ const App = () => {
     if (loggedUserJSON) {
       const userTemp = JSON.parse(loggedUserJSON)
       dispatch(setUser(userTemp))
-      setShowBlogForm(false)
     }
   }, []);
 
@@ -37,10 +33,7 @@ const App = () => {
       {user === null ?
         <LoginForm
         /> :
-        <Blogs
-          showBlogForm={showBlogForm}
-          setShowBlogForm={setShowBlogForm}
-        />}
+        <Blogs />}
 
     </div>
   );

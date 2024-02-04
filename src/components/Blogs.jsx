@@ -1,28 +1,25 @@
 // Blogs.js
-import React from 'react';
+import React, { useState } from 'react';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { clearUser } from '../features/user/userSlice';
 
-const Blogs = ({ showBlogForm, setShowBlogForm }) => {
+const Blogs = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user);
   const dispatch = useDispatch()
+  const [showBlogForm, setShowBlogForm] = useState(true)
 
   const logOut = () => {
     dispatch(clearUser());
     window.localStorage.removeItem("loggedBlogAppUser");
-    setShowBlogForm(false);
   };
 
   return (
     <div>
       {blogs.map(blog => (
-        <Blog key={blog._id} blog={blog}
-          user={user}
-        />
+        <Blog key={blog._id} blog={blog} />
       ))}
       {user.name} is logged in <button onClick={logOut}>Logout</button>
       <div>
