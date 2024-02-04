@@ -2,8 +2,11 @@
 import React from 'react';
 import Blog from './Blog';
 import BlogForm from './BlogForm';
+import { useSelector } from 'react-redux';
 
-const Blogs = ({ blogs, user, getBlogsFromApi, showBlogForm, setShowBlogForm, setUser }) => {
+const Blogs = ({ user, showBlogForm, setShowBlogForm, setUser }) => {
+  const blogs = useSelector(state => state.blogs)
+  console.log("🚀 ~ Blogs ~ blogs:", blogs)
   const logOut = () => {
     setUser(null); // setUser needs to be passed as a prop
     window.localStorage.removeItem("loggedBlogAppUser");
@@ -14,7 +17,6 @@ const Blogs = ({ blogs, user, getBlogsFromApi, showBlogForm, setShowBlogForm, se
     <div>
       {blogs.map(blog => (
         <Blog key={blog._id} blog={blog}
-          getBlogsFromApi={getBlogsFromApi}
           user={user}
         />
       ))}
@@ -24,7 +26,6 @@ const Blogs = ({ blogs, user, getBlogsFromApi, showBlogForm, setShowBlogForm, se
           <BlogForm
             setShowBlogForm={setShowBlogForm}
             user={user}
-            getBlogsFromApi={getBlogsFromApi}
           /> :
           <button onClick={() => setShowBlogForm(true)}>add blog</button>
         }

@@ -5,10 +5,10 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs';
 import { useDispatch } from 'react-redux';
-import { setNotificationWithTimeout } from './features/blogs/blogSlice';
+import { setNotificationWithTimeout } from './features/notifications/notificationSlice';
+import { setBlogs } from './features/blogs/blogSlice';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
@@ -16,7 +16,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const getBlogsFromApi = () => {
-    blogService.getAll().then(blogs => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
+    blogService.getAll().then(blogs => dispatch(setBlogs(blogs.sort((a, b) => b.likes - a.likes))));
   }
 
   useEffect(() => {
@@ -59,10 +59,8 @@ const App = () => {
           handleLogin={handleLogin}
         /> :
         <Blogs
-          blogs={blogs}
           user={user}
-          setUser={setUser} // Make sure to pass setUser
-          getBlogsFromApi={getBlogsFromApi}
+          setUser={setUser}
           showBlogForm={showBlogForm}
           setShowBlogForm={setShowBlogForm}
         />}

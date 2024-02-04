@@ -1,9 +1,9 @@
 import { useState, } from 'react';
 import blogService from '../services/blogs';
 import { useDispatch } from 'react-redux';
-import { setNotificationWithTimeout } from '../features/blogs/blogSlice';
+import { setNotificationWithTimeout } from '../features/notifications/notificationSlice';
 
-const Blog = ({ blog, getBlogsFromApi, user }) => {
+const Blog = ({ blog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -18,7 +18,6 @@ const Blog = ({ blog, getBlogsFromApi, user }) => {
       const updatedBlog = { ...blog, likes: blog.likes + 1 }
       await blogService.updateBlog(updatedBlog, blog._id)
       dispatch(setNotificationWithTimeout({ message: `${blog.title} by ${blog.author} liked`, type: "success" }))
-      getBlogsFromApi()
     }
     fetch()
   }
@@ -28,7 +27,6 @@ const Blog = ({ blog, getBlogsFromApi, user }) => {
       if (window.confirm(`Delete blog ${blog.title} by ${blog.author}`)) {
         await blogService.deleteBlog(user.token, blog._id)
         dispatch(setNotificationWithTimeout({ message: `${blog.title} by ${blog.author} deleted`, type: "success" }))
-        getBlogsFromApi()
       }
 
     }

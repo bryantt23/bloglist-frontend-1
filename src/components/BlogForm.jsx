@@ -2,27 +2,29 @@ import { useState, } from 'react';
 import blogService from '../services/blogs';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { useDispatch } from 'react-redux';
-import { setNotificationWithTimeout } from '../features/blogs/blogSlice';
+import { setNotificationWithTimeout } from '../features/notifications/notificationSlice';
+import { addBlog } from '../features/blogs/blogSlice';
 
-const BlogForm = ({ setShowBlogForm, user, getBlogsFromApi }) => {
+const BlogForm = ({ setShowBlogForm, user }) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
     const dispatch = useDispatch()
 
-    const addBlog = (e) => {
+    const addNewBlog = (e) => {
         e.preventDefault()
         async function fetch() {
-            await blogService.addBlog({ title, author, url }, user.token)
+            const blog = { title, author, url }
+            await blogService.addBlog(blog, user.token)
             dispatch(setNotificationWithTimeout({ message: `${title} by ${author} added`, type: "success" }))
-            getBlogsFromApi()
+            dispatch(addBlog(blog))
         }
         fetch()
     }
 
     return <div>
         <h2>create new</h2>
-        <form onSubmit={addBlog}>
+        <form onSubmit={addNewBlog}>
             <div>
                 title: <input type="text" value={title} onChange={e => setTitle(e.target.value)} data-testid="title-input" />
             </div>
@@ -45,8 +47,7 @@ BlogForm.propTypes = {
     setShowBlogForm: PropTypes.func.isRequired,
     user: PropTypes.shape({
         token: PropTypes.string.isRequired
-    }).isRequired,
-    getBlogsFromApi: PropTypes.func.isRequired
+    }).isRequired
 };
 
 export default BlogForm
