@@ -4,12 +4,14 @@ import PropTypes from 'prop-types'; // Import PropTypes
 import { useDispatch } from 'react-redux';
 import { setNotificationWithTimeout } from '../features/notifications/notificationSlice';
 import { addBlog } from '../features/blogs/blogSlice';
+import { useSelector } from 'react-redux';
 
-const BlogForm = ({ setShowBlogForm, user }) => {
+const BlogForm = ({ setShowBlogForm }) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user);
 
     const addNewBlog = (e) => {
         e.preventDefault()
@@ -44,10 +46,7 @@ const BlogForm = ({ setShowBlogForm, user }) => {
 
 // Define PropTypes for BlogForm
 BlogForm.propTypes = {
-    setShowBlogForm: PropTypes.func.isRequired,
-    user: PropTypes.shape({
-        token: PropTypes.string.isRequired
-    }).isRequired
+    setShowBlogForm: PropTypes.func.isRequired
 };
 
 export default BlogForm

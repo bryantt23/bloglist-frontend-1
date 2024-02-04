@@ -7,13 +7,15 @@ import Blogs from './components/Blogs';
 import { useDispatch } from 'react-redux';
 import { setNotificationWithTimeout } from './features/notifications/notificationSlice';
 import { setBlogs } from './features/blogs/blogSlice';
+import { setUser } from './features/user/userSlice';
+import { useSelector } from 'react-redux';
 
 const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null)
   const [showBlogForm, setShowBlogForm] = useState(false)
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user);
 
   const getBlogsFromApi = () => {
     blogService.getAll().then(blogs => dispatch(setBlogs(blogs.sort((a, b) => b.likes - a.likes))));
@@ -24,7 +26,7 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const userTemp = JSON.parse(loggedUserJSON)
-      setUser(userTemp)
+      dispatch(setUser(userTemp))
       setShowBlogForm(false)
     }
   }, []);
@@ -37,7 +39,7 @@ const App = () => {
       })
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -59,8 +61,6 @@ const App = () => {
           handleLogin={handleLogin}
         /> :
         <Blogs
-          user={user}
-          setUser={setUser}
           showBlogForm={showBlogForm}
           setShowBlogForm={setShowBlogForm}
         />}
