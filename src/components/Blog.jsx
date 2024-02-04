@@ -2,6 +2,7 @@ import { useState, } from 'react';
 import blogService from '../services/blogs';
 import { useDispatch } from 'react-redux';
 import { setNotificationWithTimeout } from '../features/notifications/notificationSlice';
+import { updateBlog, deleteBlog } from '../features/blogs/blogSlice';
 
 const Blog = ({ blog, user }) => {
   const blogStyle = {
@@ -16,7 +17,8 @@ const Blog = ({ blog, user }) => {
   const addLike = () => {
     async function fetch() {
       const updatedBlog = { ...blog, likes: blog.likes + 1 }
-      await blogService.updateBlog(updatedBlog, blog._id)
+      const returnedBlog = await blogService.updateBlog(updatedBlog, blog._id)
+      dispatch(updateBlog(returnedBlog))
       dispatch(setNotificationWithTimeout({ message: `${blog.title} by ${blog.author} liked`, type: "success" }))
     }
     fetch()
@@ -26,9 +28,9 @@ const Blog = ({ blog, user }) => {
     async function fetch() {
       if (window.confirm(`Delete blog ${blog.title} by ${blog.author}`)) {
         await blogService.deleteBlog(user.token, blog._id)
+        dispatch(deleteBlog(blog._id))
         dispatch(setNotificationWithTimeout({ message: `${blog.title} by ${blog.author} deleted`, type: "success" }))
       }
-
     }
     fetch()
   }
