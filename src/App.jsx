@@ -11,8 +11,6 @@ import { setUser } from './features/user/userSlice';
 import { useSelector } from 'react-redux';
 
 const App = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [showBlogForm, setShowBlogForm] = useState(false)
   const dispatch = useDispatch()
   const user = useSelector(state => state.user);
@@ -31,22 +29,6 @@ const App = () => {
     }
   }, []);
 
-  const handleLogin = async e => {
-    e.preventDefault();
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      dispatch(setUser(user))
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(setNotificationWithTimeout({ message: 'Wrong credentials', type: "error" }));
-    }
-  };
-
   return (
     <div>
       <Notification />
@@ -54,11 +36,6 @@ const App = () => {
 
       {user === null ?
         <LoginForm
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
         /> :
         <Blogs
           showBlogForm={showBlogForm}
