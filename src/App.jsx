@@ -4,6 +4,7 @@ import blogService from './services/blogs';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
 import Blogs from './components/Blogs';
+import Blog from './components/Blog';
 import User from './components/User';
 import Users from './components/Users';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +32,6 @@ const App = () => {
     <Router>
       <div>
         <Notification />
-        <h2>blogs</h2>
         <Routes>
           {user ? (
             // Routes accessible when the user is logged in
@@ -39,6 +39,7 @@ const App = () => {
               <Route path="/" element={<Blogs />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users/:id" element={<User />} />
+              <Route path="/blogs/:id" element={<Blog />} />
 
               {/* Redirect from login to blogs if user is already logged in */}
               <Route path="/login" element={<Navigate replace to="/" />} />

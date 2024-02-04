@@ -3,8 +3,11 @@ import blogService from '../services/blogs';
 import { useSelector, useDispatch } from 'react-redux';
 import { setNotificationWithTimeout } from '../features/notifications/notificationSlice';
 import { updateBlog, deleteBlog } from '../features/blogs/blogSlice';
+import { useParams } from 'react-router-dom';
 
-const Blog = ({ blog }) => {
+const Blog = () => {
+  const { id } = useParams()
+  const blog = useSelector(state => state.blogs.find(b => b._id === id))
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,7 +17,6 @@ const Blog = ({ blog }) => {
   }
   const dispatch = useDispatch()
   const user = useSelector(state => state.user);
-  const [showDetails, setShowDetails] = useState(false)
   const addLike = () => {
     async function fetch() {
       const updatedBlog = { ...blog, likes: blog.likes + 1 }
@@ -36,23 +38,21 @@ const Blog = ({ blog }) => {
     fetch()
   }
 
+  if (!blog) {
+    return <div>Loading...</div>; // Or some other placeholder content
+  }
+
   return (
     <div style={blogStyle}>
       <span className="blog-title">{blog.title}</span>
-      <button onClick={() => setShowDetails(!showDetails)}>
-        {showDetails ? "Hide details" : "Show details"}
-      </button>
-
-      {showDetails && (
-        <div>
-          <span className="blog-author">Author: {blog.author}</span>
-          <span className="blog-url">URL: {blog.url}</span>
-          <span className="blog-likes">Likes: {blog.likes}</span>
-          <button className="blog-like-button" onClick={addLike}>Like</button>
-          {blog.user.name === user.name && <button className="blog-delete-button" onClick={deleteTheBlog}>Delete blog</button>}
-          <p>Added by {blog.user.name}</p>
-        </div>
-      )}
+      <div>
+        <span className="blog-author">Author: {blog.author}</span>
+        <span className="blog-url">URL: {blog.url}</span>
+        <span className="blog-likes">Likes: {blog.likes}</span>
+        <button className="blog-like-button" onClick={addLike}>Like</button>
+        {blog.user.name === user.name && <button className="blog-delete-button" onClick={deleteTheBlog}>Delete blog</button>}
+        <p>Added by {blog.user.name}</p>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // components/Users.js
 import React, { useState, useEffect } from 'react';
 import usersService from '../services/users'; // Adjust the import path as needed
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function User() {
     const { id } = useParams()
